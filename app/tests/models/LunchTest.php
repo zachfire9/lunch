@@ -2,16 +2,12 @@
 class LunchTest extends TestCase
 {
     /**
-     * Testing the create method.
+     * Provider for testCreate.
      * 
-     * @return null
+     * @return array
      */
-    public function testCreate()
+    public function providerCreate()
     {
-        $restaurantMock = $this->getMockBuilder('Restaurant')
-                               ->setMethods(array('getAll'))
-                               ->getMock();
-
         $restaurants = (object) array(
             (object) array(
                 'id' => 1,
@@ -29,14 +25,6 @@ class LunchTest extends TestCase
             ),
         );
 
-        $restaurantMock->expects($this->any())
-                       ->method('getAll')
-                       ->willReturn($restaurants);
-
-        $userMock = $this->getMockBuilder('User')
-                         ->setMethods(array('getFriends'))
-                         ->getMock();
-
         $friends = (object) array(
             (object) array(
                 'id' => 2,
@@ -52,6 +40,33 @@ class LunchTest extends TestCase
                 'updated_at' => '2015-03-18 02:19:01',
             ),
         );
+
+        return array(
+            array($restaurants, $friends),
+        );
+    }
+
+    /**
+     * Testing the create method.
+     *
+     * @dataProvider providerCreate
+     * @param  object $restaurants Users restaurants
+     * @param  object $friends     Users friends
+     * @return null
+     */
+    public function testCreate($restaurants, $friends)
+    {
+        $restaurantMock = $this->getMockBuilder('Restaurant')
+                               ->setMethods(array('getAll'))
+                               ->getMock();
+
+        $restaurantMock->expects($this->any())
+                       ->method('getAll')
+                       ->willReturn($restaurants);
+
+        $userMock = $this->getMockBuilder('User')
+                         ->setMethods(array('getFriends'))
+                         ->getMock();
 
         $userMock->expects($this->any())
                  ->method('getFriends')
@@ -71,15 +86,17 @@ class LunchTest extends TestCase
     }
 
     /**
-     * Testing the create method.
+     * Provider for testStore.
      * 
-     * @return null
+     * @return array
      */
-    public function testStore()
+    public function providerStore()
     {
-        $lunchMock = $this->getMockBuilder('Lunch')
-                          ->setMethods(array('addFriends', 'addRestaurants', 'save'))
-                          ->getMock();
+        $input = array(
+            'deadline' => '2015-10-17 00:00:00',
+            'restaurant_1' => 1,
+            'friend_2' => 2,
+        );
 
         $lunchFriends = array(
             array(
@@ -92,16 +109,36 @@ class LunchTest extends TestCase
             ),
         );
 
-        $lunchMock->expects($this->once())
-                  ->method('addFriends')
-                  ->with($this->equalTo($lunchFriends));
-
         $lunchRestaurants = array(
             array(
                 'lunch_id' => 1, 
                 'restaurant_id' => 1,
             ),
         );
+
+        return array(
+            array($input, $lunchFriends, $lunchRestaurants),
+        );
+    }
+
+    /**
+     * Testing the create method.
+     * 
+     * @dataProvider providerStore
+     * @param  object $input            Input from user
+     * @param  object $lunchFriends     Friends to add to lunch
+     * @param  object $lunchRestaurants Restaurants to add to lunch
+     * @return null
+     */
+    public function testStore($input, $lunchFriends, $lunchRestaurants)
+    {
+        $lunchMock = $this->getMockBuilder('Lunch')
+                          ->setMethods(array('addFriends', 'addRestaurants', 'save'))
+                          ->getMock();
+
+        $lunchMock->expects($this->once())
+                  ->method('addFriends')
+                  ->with($this->equalTo($lunchFriends));
 
         $lunchMock->expects($this->once())
                   ->method('addRestaurants')
@@ -116,39 +153,21 @@ class LunchTest extends TestCase
         $lunch = new App\Models\Lunch();
         $lunch->setLunch($lunchMock);
 
-        $input = array(
-            'deadline' => '2015-10-17 00:00:00',
-            'restaurant_1' => 1,
-            'friend_2' => 2,
-        );
-
         $actualResult = $lunch->store(1, $input);
 
         $this->assertTrue($actualResult);
     }
 
     /**
-     * Testing the edit method.
+     * Provider for testEdit.
      * 
-     * @return null
+     * @return array
      */
-    public function testEdit()
+    public function providerEdit()
     {
-        $lunchMock = $this->getMockBuilder('Lunch')
-                          ->setMethods(array('getOne', 'getFriendsFull', 'getRestaurantsFull'))
-                          ->getMock();
-
         $lunchData = array(
             'id' => 1,
         );
-
-        $lunchMock->expects($this->once())
-                  ->method('getOne')
-                  ->willReturn($lunchData);
-
-        $lunchMock->expects($this->once())
-                  ->method('getFriendsFull')
-                  ->willReturn(array());
 
         $restaurantsData = array(
             (object) array(
@@ -164,14 +183,6 @@ class LunchTest extends TestCase
                 'name' => 'Burger King',
             ),
         );
-
-        $lunchMock->expects($this->once())
-                  ->method('getRestaurantsFull')
-                  ->willReturn($restaurantsData);
-
-        $userMock = $this->getMockBuilder('User')
-                         ->setMethods(array('getFriends', 'getRestaurants'))
-                         ->getMock();
 
         $userRestaurantsData = array(
             (object) array(
@@ -190,10 +201,6 @@ class LunchTest extends TestCase
             ),
         );
 
-        $userMock->expects($this->once())
-                 ->method('getRestaurants')
-                 ->willReturn($userRestaurantsData);
-
         $friends = array(
             (object) array(
                 'id' => 2,
@@ -209,16 +216,6 @@ class LunchTest extends TestCase
                 'updated_at' => '2015-03-18 02:19:01',
             ),
         );
-
-        $userMock->expects($this->once())
-                 ->method('getFriends')
-                 ->willReturn($friends);
-
-        $lunch = new App\Models\Lunch();
-        $lunch->setUser($userMock);
-        $lunch->setLunch($lunchMock);
-
-        $actualResult = $lunch->edit(1, 1);
 
         $restaurantsExpected = array(
             1 => (object) array(
@@ -271,22 +268,87 @@ class LunchTest extends TestCase
             ),
         );
 
+        $mockData = array(
+            'lunchData' => $lunchData,
+            'restaurantsData' => $restaurantsData,
+            'userRestaurantsData' => $userRestaurantsData,
+            'friends' => $friends,
+        );
+
         $expectedResult = array(
             'lunch' => $lunchData,
             'restaurants' => $restaurantsExpected,
             'friends' => $friendsExpected,
         );
 
+        return array(
+            array($mockData, $expectedResult),
+        );
+    }
+
+    /**
+     * Testing the edit method.
+     *
+     * @dataProvider providerEdit
+     * @param  array $mockData        Data for mocking methods
+     * @param  array $expectedResult  Data expected back from the method
+     * @return null
+     */
+    public function testEdit($mockData, $expectedResult)
+    {
+        $lunchMock = $this->getMockBuilder('Lunch')
+                          ->setMethods(array('getOne', 'getFriendsFull', 'getRestaurantsFull'))
+                          ->getMock();
+
+        $lunchMock->expects($this->once())
+                  ->method('getOne')
+                  ->willReturn($mockData['lunchData']);
+
+        $lunchMock->expects($this->once())
+                  ->method('getFriendsFull')
+                  ->willReturn(array());
+
+        $lunchMock->expects($this->once())
+                  ->method('getRestaurantsFull')
+                  ->willReturn($mockData['restaurantsData']);
+
+        $userMock = $this->getMockBuilder('User')
+                         ->setMethods(array('getFriends', 'getRestaurants'))
+                         ->getMock();
+
+        $userMock->expects($this->once())
+                 ->method('getRestaurants')
+                 ->willReturn($mockData['userRestaurantsData']);
+
+        $userMock->expects($this->once())
+                 ->method('getFriends')
+                 ->willReturn($mockData['friends']);
+
+        $lunch = new App\Models\Lunch();
+        $lunch->setUser($userMock);
+        $lunch->setLunch($lunchMock);
+
+        $actualResult = $lunch->edit(1, 1);
+
         $this->assertEquals($expectedResult, $actualResult);
     }
 
     /**
-     * Testing the update method.
+     * Provider for providerUpdate.
      * 
-     * @return null
+     * @return array
      */
-    public function testUpdate()
+    public function providerUpdate()
     {
+        $input = array(
+            'deadline' => '2015-10-17 00:00:00',
+            'restaurant_1' => 1,
+            'restaurant_3' => 3,
+            'restaurant_4' => 4,
+            'friend_2' => 2,
+            'friend_3' => 3,
+        );
+
         $lunchMethods = array(
             'addFriend',
             'addRestaurant',
@@ -300,8 +362,57 @@ class LunchTest extends TestCase
             'getRestaurants', 
         );
 
+        $lunchFriends = array(
+            (object) array(
+                'id' => 12,
+                'lunch_id' => 7,
+                'friend_id' => 2,
+            ),
+        );
+
+        $lunchRestaurant = (object) array(
+            'id' => 12,
+            'lunch_id' => 7,
+            'restaurant_id' => 1,
+        );
+
+        $lunchRestaurants = array(
+            (object) array(
+                'id' => 12,
+                'lunch_id' => 7,
+                'restaurant_id' => 1,
+            ),
+            (object) array(
+                'id' => 18,
+                'lunch_id' => 7,
+                'restaurant_id' => 3,
+            ),
+        );
+
+        $mockData = array(
+            'lunchMethods' => $lunchMethods,
+            'lunchFriends' => $lunchFriends,
+            'lunchRestaurant' => $lunchRestaurant,
+            'lunchRestaurants' => $lunchRestaurants,
+        );
+
+        return array(
+            array($input, $mockData),
+        );
+    }
+
+    /**
+     * Testing the update method.
+     *
+     * @dataProvider providerUpdate
+     * @param  array $input    Input from user
+     * @param  array $mockData Data for mocking methods
+     * @return null
+     */
+    public function testUpdate($input, $mockData)
+    {
         $lunchMock = $this->getMockBuilder('Lunch')
-                          ->setMethods($lunchMethods)
+                          ->setMethods($mockData['lunchMethods'])
                           ->getMock();
 
         $lunchMock->expects($this->any())
@@ -328,18 +439,10 @@ class LunchTest extends TestCase
                   ->method('deleteRestaurants')
                   ->willReturn(true);
 
-        $lunchFriends = array(
-            (object) array(
-                'id' => 12,
-                'lunch_id' => 7,
-                'friend_id' => 2,
-            ),
-        );
-
         $lunchMock->expects($this->once())
                   ->method('getFriends')
                   ->with($this->equalTo(1))
-                  ->willReturn($lunchFriends);
+                  ->willReturn($mockData['lunchFriends']);
 
         $lunchDataMock = $this->getMockBuilder('Lunch')
                               ->setMethods(array('save'))
@@ -356,42 +459,14 @@ class LunchTest extends TestCase
                   ->method('getOne')
                   ->willReturn($lunchDataMock);
 
-        $lunchRestaurant = (object) array(
-            'id' => 12,
-            'lunch_id' => 7,
-            'restaurant_id' => 1,
-        );
-
         $lunchMock->expects($this->any())
                   ->method('getRestaurant')
-                  ->willReturn($lunchRestaurant);
-
-        $lunchRestaurants = array(
-            (object) array(
-                'id' => 12,
-                'lunch_id' => 7,
-                'restaurant_id' => 1,
-            ),
-            (object) array(
-                'id' => 18,
-                'lunch_id' => 7,
-                'restaurant_id' => 3,
-            ),
-        );
+                  ->willReturn($mockData['lunchRestaurant']);
 
         $lunchMock->expects($this->once())
                   ->method('getRestaurants')
                   ->with($this->equalTo(1))
-                  ->willReturn($lunchRestaurants);
-
-        $input = array(
-            'deadline' => '2015-10-17 00:00:00',
-            'restaurant_1' => 1,
-            'restaurant_3' => 3,
-            'restaurant_4' => 4,
-            'friend_2' => 2,
-            'friend_3' => 3,
-        );
+                  ->willReturn($mockData['lunchRestaurants']);
 
         $lunch = new App\Models\Lunch();
         $lunch->setLunch($lunchMock);
