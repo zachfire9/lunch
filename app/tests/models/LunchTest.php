@@ -203,9 +203,77 @@ class LunchTest extends TestCase
 
         $friends = array(
             (object) array(
-                'id' => 2,
+                'id' => 3,
+                'user_id' => 3,
+                'friend_id' => 3,
+                'username' => 'test',
+                'email' => 'test@aol.com',
+                'password' => 'test',
+                'first_name' => 'Test',
+                'last_name' => 'Name',
+                'remember_token' => '',
+                'created_at' => '2015-03-18 02:19:01',
+                'updated_at' => '2015-03-18 02:19:01',
+            ),
+            (object) array(
+                'id' => 5,
+                'user_id' => 5,
+                'friend_id' => 5,
+                'username' => 'test',
+                'email' => 'test@aol.com',
+                'password' => 'test',
+                'first_name' => 'Test',
+                'last_name' => 'Name',
+                'remember_token' => '',
+                'created_at' => '2015-03-18 02:19:01',
+                'updated_at' => '2015-03-18 02:19:01',
+            ),
+        );
+
+        $friendsFull = array(
+            (object) array(
+                'id' => 1,
                 'user_id' => 1,
+                'friend_id' => 1,
+                'username' => 'test',
+                'email' => 'test@aol.com',
+                'password' => 'test',
+                'first_name' => 'Test',
+                'last_name' => 'Name',
+                'remember_token' => '',
+                'created_at' => '2015-03-18 02:19:01',
+                'updated_at' => '2015-03-18 02:19:01',
+            ),
+            (object) array(
+                'id' => 2,
+                'user_id' => 2,
                 'friend_id' => 2,
+                'username' => 'test',
+                'email' => 'test@aol.com',
+                'password' => 'test',
+                'first_name' => 'Test',
+                'last_name' => 'Name',
+                'remember_token' => '',
+                'created_at' => '2015-03-18 02:19:01',
+                'updated_at' => '2015-03-18 02:19:01',
+            ),
+            (object) array(
+                'id' => 3,
+                'user_id' => 3,
+                'friend_id' => 3,
+                'username' => 'test',
+                'email' => 'test@aol.com',
+                'password' => 'test',
+                'first_name' => 'Test',
+                'last_name' => 'Name',
+                'remember_token' => '',
+                'created_at' => '2015-03-18 02:19:01',
+                'updated_at' => '2015-03-18 02:19:01',
+            ),
+            (object) array(
+                'id' => 4,
+                'user_id' => 4,
+                'friend_id' => 4,
                 'username' => 'test',
                 'email' => 'test@aol.com',
                 'password' => 'test',
@@ -254,7 +322,7 @@ class LunchTest extends TestCase
         $friendsExpected = array(
             2 => (object) array(
                 'id' => 2,
-                'user_id' => 1,
+                'user_id' => 2,
                 'friend_id' => 2,
                 'username' => 'test',
                 'email' => 'test@aol.com',
@@ -264,8 +332,59 @@ class LunchTest extends TestCase
                 'remember_token' => '',
                 'created_at' => '2015-03-18 02:19:01',
                 'updated_at' => '2015-03-18 02:19:01',
-                'selected' => false,
+                'selected' => true,
+                'edit' => false,
             ),
+            3 => (object) array(
+                'id' => 3,
+                'user_id' => 3,
+                'friend_id' => 3,
+                'username' => 'test',
+                'email' => 'test@aol.com',
+                'password' => 'test',
+                'first_name' => 'Test',
+                'last_name' => 'Name',
+                'remember_token' => '',
+                'created_at' => '2015-03-18 02:19:01',
+                'updated_at' => '2015-03-18 02:19:01',
+                'selected' => true,
+                'edit' => true,
+            ),
+            4 => (object) array(
+                'id' => 4,
+                'user_id' => 4,
+                'friend_id' => 4,
+                'username' => 'test',
+                'email' => 'test@aol.com',
+                'password' => 'test',
+                'first_name' => 'Test',
+                'last_name' => 'Name',
+                'remember_token' => '',
+                'created_at' => '2015-03-18 02:19:01',
+                'updated_at' => '2015-03-18 02:19:01',
+                'selected' => true,
+                'edit' => false,
+            ),
+            5 => (object) array(
+                'id' => 5,
+                'user_id' => 5,
+                'friend_id' => 5,
+                'username' => 'test',
+                'email' => 'test@aol.com',
+                'password' => 'test',
+                'first_name' => 'Test',
+                'last_name' => 'Name',
+                'remember_token' => '',
+                'created_at' => '2015-03-18 02:19:01',
+                'updated_at' => '2015-03-18 02:19:01',
+                'selected' => false,
+                'edit' => true,
+            ),
+        );
+
+        $input = array(
+          'user_id' => 1,
+          'lunch_id' => 1,
         );
 
         $mockData = array(
@@ -273,6 +392,7 @@ class LunchTest extends TestCase
             'restaurantsData' => $restaurantsData,
             'userRestaurantsData' => $userRestaurantsData,
             'friends' => $friends,
+            'friendsFull' => $friendsFull,
         );
 
         $expectedResult = array(
@@ -281,8 +401,73 @@ class LunchTest extends TestCase
             'friends' => $friendsExpected,
         );
 
+        $testA = array($input, $mockData, $expectedResult);
+
+        $friendsFull = array(
+            (object) array(
+                'id' => 1,
+                'user_id' => 1,
+                'friend_id' => 1,
+                'username' => 'test',
+                'email' => 'test@aol.com',
+                'password' => 'test',
+                'first_name' => 'Test',
+                'last_name' => 'Name',
+                'remember_token' => '',
+                'created_at' => '2015-03-18 02:19:01',
+                'updated_at' => '2015-03-18 02:19:01',
+            ),
+            (object) array(
+                'id' => 2,
+                'user_id' => 2,
+                'friend_id' => 2,
+                'username' => 'test',
+                'email' => 'test@aol.com',
+                'password' => 'test',
+                'first_name' => 'Test',
+                'last_name' => 'Name',
+                'remember_token' => '',
+                'created_at' => '2015-03-18 02:19:01',
+                'updated_at' => '2015-03-18 02:19:01',
+            ),
+        );
+
+        $friendsExpected = array(
+            2 => (object) array(
+                'id' => 2,
+                'user_id' => 2,
+                'friend_id' => 2,
+                'username' => 'test',
+                'email' => 'test@aol.com',
+                'password' => 'test',
+                'first_name' => 'Test',
+                'last_name' => 'Name',
+                'remember_token' => '',
+                'created_at' => '2015-03-18 02:19:01',
+                'updated_at' => '2015-03-18 02:19:01',
+                'selected' => true,
+                'edit' => false,
+            ),
+        );
+
+        $mockData = array(
+            'lunchData' => $lunchData,
+            'restaurantsData' => $restaurantsData,
+            'userRestaurantsData' => $userRestaurantsData,
+            'friends' => array(),
+            'friendsFull' => $friendsFull,
+        );
+
+        $expectedResult = array(
+            'lunch' => $lunchData,
+            'restaurants' => $restaurantsExpected,
+            'friends' => $friendsExpected,
+        );
+
+        $testB = array($input, $mockData, $expectedResult);
+
         return array(
-            array($mockData, $expectedResult),
+            $testA,
         );
     }
 
@@ -290,11 +475,12 @@ class LunchTest extends TestCase
      * Testing the edit method.
      *
      * @dataProvider providerEdit
+     * @param  array $input           Data sent to the method
      * @param  array $mockData        Data for mocking methods
      * @param  array $expectedResult  Data expected back from the method
      * @return null
      */
-    public function testEdit($mockData, $expectedResult)
+    public function testEdit($input, $mockData, $expectedResult)
     {
         $lunchMock = $this->getMockBuilder('Lunch')
                           ->setMethods(array('getOne', 'getFriendsFull', 'getRestaurantsFull'))
@@ -306,7 +492,7 @@ class LunchTest extends TestCase
 
         $lunchMock->expects($this->once())
                   ->method('getFriendsFull')
-                  ->willReturn(array());
+                  ->willReturn($mockData['friendsFull']);
 
         $lunchMock->expects($this->once())
                   ->method('getRestaurantsFull')
@@ -328,7 +514,7 @@ class LunchTest extends TestCase
         $lunch->setUser($userMock);
         $lunch->setLunch($lunchMock);
 
-        $actualResult = $lunch->edit(1, 1);
+        $actualResult = $lunch->edit($input['user_id'], $input['lunch_id']);
 
         $this->assertEquals($expectedResult, $actualResult);
     }

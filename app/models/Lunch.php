@@ -142,12 +142,18 @@ class Lunch
 
         foreach ($friendsAll as $friend) {
             $friend->selected = false;
+            $friend->edit = true;
             $friendsList[$friend->id] = $friend;
         }
 
         foreach ($lunchFriends as $friend) {
-            if (isset($friendsList[$friend->id])) {
+            if ($friend->friend_id !== $userId && isset($friendsList[$friend->id])) {
                 $friendsList[$friend->id]->selected = true;
+                $friendsList[$friend->id]->edit = true;
+            } elseif ($friend->friend_id !== $userId) {
+                $friend->selected = true;
+                $friend->edit = false;
+                $friendsList[$friend->id] = $friend;
             }
         }
  
