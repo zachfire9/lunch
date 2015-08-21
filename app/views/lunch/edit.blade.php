@@ -27,6 +27,8 @@
         <div class='form-group'>
             @if (isset($restaurant->checkbox) && $restaurant->checkbox === true)
             {{ Form::checkbox('restaurant_' . $restaurant->id, $restaurant->id, $restaurant->selected) }}
+            @else
+            {{ Form::hidden('restaurant_' . $restaurant->id, $restaurant->id) }}
             @endif
             {{ $restaurant->name }}
 
@@ -56,7 +58,11 @@
 
     @foreach ($friends as $friend)
         <div class='form-group'>
-            {{ Form::checkbox('friend_' . $friend->id, $friend->id, $friend->selected) }}
+            @if ($friend->edit)
+                {{ Form::checkbox('friend_' . $friend->id, $friend->id, $friend->selected) }}
+            @else
+                {{ Form::hidden('friend_' . $friend->id, $friend->id) }}
+            @endif
             {{ $friend->first_name }} {{ $friend->last_name }}
         </div>
     @endforeach

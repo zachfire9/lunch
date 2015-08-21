@@ -198,7 +198,7 @@ class Lunch
         $results = $lunchDataSource->getFriends($lunchId);
 
         foreach ($results as $result) {
-            if (isset($input['friend_' . $result->friend_id])) {
+            if (isset($input['friend_' . $result->friend_id]) || $result->friend_id === $userId) {
                 $lunchFriendsCurrent[$result->friend_id] = $result;
             } else {
                 $lunchDataSource->deleteFriends($result->id);
@@ -207,7 +207,12 @@ class Lunch
 
         $lunchRestaurants = array();
         $lunchRestaurantRanks = array();
-        $lunchFriends = array();
+        $lunchFriends = array(
+            array(
+                'lunch_id' => $lunch->id, 
+                'friend_id' => $userId,
+            ),
+        );
 
         foreach ($input as $key => $val) {
             if (preg_match("/^restaurant_\d+$/", $key)) {
