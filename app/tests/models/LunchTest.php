@@ -175,7 +175,7 @@ class LunchTest extends TestCase
         $restaurantsData = array(
             (object) array(
                 'id' => 3,
-                'user_id' => $userId,
+                'user_id' => 5,
                 'deadline' => '2015-11-11 00:00:00',
                 'created_at' => '2015-03-18 02:20:45',
                 'updated_at' => '2015-03-18 02:20:45',
@@ -310,7 +310,7 @@ class LunchTest extends TestCase
             ),
             3 => (object) array(
                 'id' => 3,
-                'user_id' => $userId,
+                'user_id' => 5,
                 'name' => 'Burger King',
                 'created_at' => '2015-03-18 02:20:45',
                 'updated_at' => '2015-03-18 02:20:45',
@@ -320,7 +320,7 @@ class LunchTest extends TestCase
                 'restaurant_id' => 3,
                 'lunch_restaurant_id' => 26,
                 'deadline' => '2015-11-11 00:00:00',
-                'rank_user_id' => 1,
+                'rank_user_id' => $userId,
             ),
         );
 
@@ -458,7 +458,7 @@ class LunchTest extends TestCase
         $restaurantsData = array(
             (object) array(
                 'id' => 3,
-                'user_id' => $userId,
+                'user_id' => 5,
                 'deadline' => '2015-11-11 00:00:00',
                 'created_at' => '2015-03-18 02:20:45',
                 'updated_at' => '2015-03-18 02:20:45',
@@ -466,8 +466,43 @@ class LunchTest extends TestCase
                 'restaurant_id' => 3,
                 'lunch_restaurant_id' => 26,
                 'rank' => 1,
-                'rank_user_id' => $userId,
+                'rank_user_id' => 10,
                 'name' => 'Burger King',
+            ),
+        );
+
+        $restaurantsExpected = array(
+            1 => (object) array(
+                'id' => 1,
+                'user_id' => $userId,
+                'name' => 'Five Guys',
+                'created_at' => '2015-03-18 02:20:29',
+                'updated_at' => '2015-03-18 02:20:29',
+                'selected' => false,
+                'checkbox' => true,
+            ),
+            2 => (object) array(
+                'id' => 2,
+                'user_id' => $userId,
+                'name' => 'Tijuana Flats',
+                'created_at' => '2015-03-18 02:20:29',
+                'updated_at' => '2015-03-18 02:20:29',
+                'selected' => false,
+                'checkbox' => true,
+            ),
+            3 => (object) array(
+                'id' => 3,
+                'user_id' => 5,
+                'name' => 'Burger King',
+                'created_at' => '2015-03-18 02:20:45',
+                'updated_at' => '2015-03-18 02:20:45',
+                'checkbox' => false,
+                'rank' => 0,
+                'lunch_id' => $lunchId,
+                'restaurant_id' => 3,
+                'lunch_restaurant_id' => 26,
+                'deadline' => '2015-11-11 00:00:00',
+                'rank_user_id' => 10,
             ),
         );
 
@@ -487,9 +522,97 @@ class LunchTest extends TestCase
 
         $testB = array($input, $mockData, $expectedResult);
 
+        $restaurantsData = array(
+            (object) array(
+                'id' => 3,
+                'user_id' => $userId,
+                'deadline' => '2015-11-11 00:00:00',
+                'created_at' => '2015-03-18 02:20:45',
+                'updated_at' => '2015-03-18 02:20:45',
+                'lunch_id' => $lunchId,
+                'restaurant_id' => 3,
+                'lunch_restaurant_id' => 26,
+                'rank' => 1,
+                'rank_user_id' => 10,
+                'name' => 'Burger King',
+            ),
+        );
+
+        $userRestaurantsData = array(
+            (object) array(
+                'id' => 1,
+                'user_id' => $userId,
+                'name' => 'Five Guys',
+                'created_at' => '2015-03-18 02:20:29',
+                'updated_at' => '2015-03-18 02:20:29',
+            ),
+            (object) array(
+                'id' => 2,
+                'user_id' => $userId,
+                'name' => 'Tijuana Flats',
+                'created_at' => '2015-03-18 02:20:29',
+                'updated_at' => '2015-03-18 02:20:29',
+            ),
+            (object) array(
+                'id' => 3,
+                'user_id' => $userId,
+                'name' => 'Burger King',
+                'created_at' => '2015-03-18 02:20:29',
+                'updated_at' => '2015-03-18 02:20:29',
+            ),
+        );
+
+        $restaurantsExpected = array(
+            1 => (object) array(
+                'id' => 1,
+                'user_id' => $userId,
+                'name' => 'Five Guys',
+                'created_at' => '2015-03-18 02:20:29',
+                'updated_at' => '2015-03-18 02:20:29',
+                'selected' => false,
+                'checkbox' => true,
+            ),
+            2 => (object) array(
+                'id' => 2,
+                'user_id' => $userId,
+                'name' => 'Tijuana Flats',
+                'created_at' => '2015-03-18 02:20:29',
+                'updated_at' => '2015-03-18 02:20:29',
+                'selected' => false,
+                'checkbox' => true,
+            ),
+            3 => (object) array(
+                'id' => 3,
+                'user_id' => $userId,
+                'name' => 'Burger King',
+                'created_at' => '2015-03-18 02:20:29',
+                'updated_at' => '2015-03-18 02:20:29',
+                'selected' => true,
+                'checkbox' => true,
+                'rank' => 0,
+            ),
+        );
+
+        $mockData = array(
+            'lunchData' => $lunchData,
+            'restaurantsData' => $restaurantsData,
+            'userRestaurantsData' => $userRestaurantsData,
+            'friends' => array(),
+            'friendsFull' => $friendsFull,
+        );
+
+        $expectedResult = array(
+            'lunch' => $lunchData,
+            'restaurants' => $restaurantsExpected,
+            'friends' => $friendsExpected,
+        );
+
+        $testC = array($input, $mockData, $expectedResult);
+
         return array(
             $testA,
             $testB,
+            $testC,
         );
     }
 

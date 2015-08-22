@@ -126,20 +126,20 @@ class Lunch
         }
 
         foreach ($lunchRestaurants as $lunchRestaurant) {
-            if (isset($restaurantsList[$lunchRestaurant->id])) {
-                $addRestaurant = clone $lunchRestaurant;
-                $addRestaurant->selected = true;
-                $addRestaurant->rank = 0;
+            $addRestaurant = clone $lunchRestaurant;
+
+            if (isset($restaurantsList[$addRestaurant->id])) {
+                $currentRestaurant = clone $restaurantsList[$addRestaurant->id];
+                $currentRestaurant->selected = true;
+                $currentRestaurant->rank = 0;
                 if (isset($addRestaurant->rank_user_id) && $addRestaurant->rank_user_id === $userId) {
-                    $addRestaurant->rank = $lunchRestaurant->rank;
+                    $currentRestaurant->rank = $addRestaurant->rank;
                 }
-                $restaurantsList[$lunchRestaurant->id] = $addRestaurant;
+                $restaurantsList[$lunchRestaurant->id] = $currentRestaurant;
             } else {
-                $addRestaurant = clone $lunchRestaurant;
                 $addRestaurant->checkbox = false;
-                $addRestaurant->rank = 0;
-                if (isset($addRestaurant->rank_user_id) && $addRestaurant->rank_user_id === $userId) {
-                    $addRestaurant->rank = $lunchRestaurant->rank;
+                if (isset($addRestaurant->rank_user_id) && $addRestaurant->rank_user_id !== $userId) {
+                   $addRestaurant->rank = 0;
                 }
                 $restaurantsList[$addRestaurant->id] = $addRestaurant;
             }
