@@ -114,23 +114,34 @@ class Lunch
 
         $lunchRestaurants = $lunchDataSource->getRestaurantsFull($lunchId);
 
-        $restaurantsAll = $userDataSource->getRestaurants($userId);
+        $userRestaurants = $userDataSource->getRestaurants($userId);
 
         $restaurantsList = array();
 
-        foreach ($restaurantsAll as $restaurant) {
-            $restaurant->selected = false;
-            $restaurant->checkbox = true;
-            $restaurantsList[$restaurant->id] = $restaurant;
+        foreach ($userRestaurants as $userRestaurant) {
+            $addRestaurant = clone $userRestaurant;
+            $addRestaurant->selected = false;
+            $addRestaurant->checkbox = true;
+            $restaurantsList[$addRestaurant->id] = $addRestaurant;
         }
 
-        foreach ($lunchRestaurants as $restaurant) {
-            if (isset($restaurantsList[$restaurant->id])) {
-                $restaurantsList[$restaurant->id]->selected = true;
-                $restaurantsList[$restaurant->id]->rank = $restaurant->rank;
+        foreach ($lunchRestaurants as $lunchRestaurant) {
+            if (isset($restaurantsList[$lunchRestaurant->id])) {
+                $addRestaurant = clone $lunchRestaurant;
+                $addRestaurant->selected = true;
+                $addRestaurant->rank = 0;
+                if (isset($addRestaurant->rank_user_id) && $addRestaurant->rank_user_id === $userId) {
+                    $addRestaurant->rank = $lunchRestaurant->rank;
+                }
+                $restaurantsList[$lunchRestaurant->id] = $addRestaurant;
             } else {
-                $restaurantsList[$restaurant->id] = $restaurant;
-                $restaurantsList[$restaurant->id]->checkbox = false;
+                $addRestaurant = clone $lunchRestaurant;
+                $addRestaurant->checkbox = false;
+                $addRestaurant->rank = 0;
+                if (isset($addRestaurant->rank_user_id) && $addRestaurant->rank_user_id === $userId) {
+                    $addRestaurant->rank = $lunchRestaurant->rank;
+                }
+                $restaurantsList[$addRestaurant->id] = $addRestaurant;
             }
         }
 

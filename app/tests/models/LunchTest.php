@@ -165,21 +165,25 @@ class LunchTest extends TestCase
      */
     public function providerEdit()
     {
+        $lunchId = 1;
+        $userId = 1;
+
         $lunchData = array(
-            'id' => 1,
+            'id' => $lunchId,
         );
 
         $restaurantsData = array(
             (object) array(
                 'id' => 3,
-                'user_id' => 1,
+                'user_id' => $userId,
                 'deadline' => '2015-11-11 00:00:00',
                 'created_at' => '2015-03-18 02:20:45',
                 'updated_at' => '2015-03-18 02:20:45',
-                'lunch_id' => 9,
+                'lunch_id' => $lunchId,
                 'restaurant_id' => 3,
                 'lunch_restaurant_id' => 26,
                 'rank' => 1,
+                'rank_user_id' => $userId,
                 'name' => 'Burger King',
             ),
         );
@@ -187,14 +191,14 @@ class LunchTest extends TestCase
         $userRestaurantsData = array(
             (object) array(
                 'id' => 1,
-                'user_id' => 1,
+                'user_id' => $userId,
                 'name' => 'Five Guys',
                 'created_at' => '2015-03-18 02:20:29',
                 'updated_at' => '2015-03-18 02:20:29',
             ),
             (object) array(
                 'id' => 2,
-                'user_id' => 1,
+                'user_id' => $userId,
                 'name' => 'Tijuana Flats',
                 'created_at' => '2015-03-18 02:20:29',
                 'updated_at' => '2015-03-18 02:20:29',
@@ -233,7 +237,7 @@ class LunchTest extends TestCase
         $friendsFull = array(
             (object) array(
                 'id' => 1,
-                'user_id' => 1,
+                'user_id' => $userId,
                 'friend_id' => 1,
                 'username' => 'test',
                 'email' => 'test@aol.com',
@@ -288,7 +292,7 @@ class LunchTest extends TestCase
         $restaurantsExpected = array(
             1 => (object) array(
                 'id' => 1,
-                'user_id' => 1,
+                'user_id' => $userId,
                 'name' => 'Five Guys',
                 'created_at' => '2015-03-18 02:20:29',
                 'updated_at' => '2015-03-18 02:20:29',
@@ -297,7 +301,7 @@ class LunchTest extends TestCase
             ),
             2 => (object) array(
                 'id' => 2,
-                'user_id' => 1,
+                'user_id' => $userId,
                 'name' => 'Tijuana Flats',
                 'created_at' => '2015-03-18 02:20:29',
                 'updated_at' => '2015-03-18 02:20:29',
@@ -306,16 +310,17 @@ class LunchTest extends TestCase
             ),
             3 => (object) array(
                 'id' => 3,
-                'user_id' => 1,
+                'user_id' => $userId,
                 'name' => 'Burger King',
                 'created_at' => '2015-03-18 02:20:45',
                 'updated_at' => '2015-03-18 02:20:45',
                 'checkbox' => false,
                 'rank' => 1,
-                'lunch_id' => 9,
+                'lunch_id' => $lunchId,
                 'restaurant_id' => 3,
                 'lunch_restaurant_id' => 26,
                 'deadline' => '2015-11-11 00:00:00',
+                'rank_user_id' => 1,
             ),
         );
 
@@ -383,8 +388,8 @@ class LunchTest extends TestCase
         );
 
         $input = array(
-          'user_id' => 1,
-          'lunch_id' => 1,
+          'user_id' => $userId,
+          'lunch_id' => $lunchId,
         );
 
         $mockData = array(
@@ -406,7 +411,7 @@ class LunchTest extends TestCase
         $friendsFull = array(
             (object) array(
                 'id' => 1,
-                'user_id' => 1,
+                'user_id' => $userId,
                 'friend_id' => 1,
                 'username' => 'test',
                 'email' => 'test@aol.com',
@@ -450,6 +455,22 @@ class LunchTest extends TestCase
             ),
         );
 
+        $restaurantsData = array(
+            (object) array(
+                'id' => 3,
+                'user_id' => $userId,
+                'deadline' => '2015-11-11 00:00:00',
+                'created_at' => '2015-03-18 02:20:45',
+                'updated_at' => '2015-03-18 02:20:45',
+                'lunch_id' => $lunchId,
+                'restaurant_id' => 3,
+                'lunch_restaurant_id' => 26,
+                'rank' => 1,
+                'rank_user_id' => $userId,
+                'name' => 'Burger King',
+            ),
+        );
+
         $mockData = array(
             'lunchData' => $lunchData,
             'restaurantsData' => $restaurantsData,
@@ -468,6 +489,7 @@ class LunchTest extends TestCase
 
         return array(
             $testA,
+            $testB,
         );
     }
 

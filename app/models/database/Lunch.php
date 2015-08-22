@@ -78,6 +78,7 @@ class Lunch extends Model
             ->leftJoin('lunch_restaurant_ranks', 'lunch_restaurants.id', '=', 'lunch_restaurant_ranks.lunch_restaurant_id')
             ->join('restaurants', 'lunch_restaurants.restaurant_id', '=', 'restaurants.id')
             ->where('lunches.id', $lunchId)
+            ->select('lunches.*', 'lunch_restaurants.*', 'lunch_restaurant_ranks.*', 'restaurants.*', 'lunch_restaurant_ranks.user_id AS rank_user_id')
             ->get();
 
         return $restaurants;
