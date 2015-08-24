@@ -44,4 +44,19 @@ class User extends Model
 
         return $restaurants;
     }
+
+    /**
+     * Get all lunch restaurant ranks for a user
+     * 
+     * @param  int $userId User id
+     * @return object
+     */
+    public function getRestaurantRanks($userId)
+    {
+        $restaurantRanks = DB::table('lunch_restaurant_ranks')
+            ->where('user_id', '=', $userId)
+            ->get();
+
+        return $restaurantRanks;
+    }
 }
