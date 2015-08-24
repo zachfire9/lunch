@@ -182,7 +182,7 @@ class Lunch extends Model
                 ->join('lunch_restaurants', 'lunch_restaurant_ranks.lunch_restaurant_id', '=', 'lunch_restaurants.id')
                 ->join('lunches', 'lunch_restaurants.lunch_id', '=', 'lunches.id')
                 ->where('lunches.id', $lunchId)
-                ->where('lunches.user_id', $userId)
+                ->where('lunch_restaurant_ranks.user_id', $userId)
                 ->delete(); 
     }
 

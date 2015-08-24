@@ -112,11 +112,8 @@ class Lunch
 
         $lunch = $lunchDataSource->getOne($lunchId);
 
-        $lunchRestaurants = $lunchDataSource->getRestaurants($lunchId);
-
+        $lunchRestaurants = $lunchDataSource->getRestaurantsFull($lunchId);
         $userRestaurants = $userDataSource->getRestaurants($userId);
-
-        $userRestaurantsRanks = $userDataSource->getRestaurantRanks($userId);
 
         $restaurantsList = array();
 
@@ -134,16 +131,23 @@ class Lunch
                 $currentRestaurant = clone $restaurantsList[$addRestaurant->id];
                 $currentRestaurant->selected = true;
                 $currentRestaurant->checkbox = $currentRestaurant->checkbox;
-                $currentRestaurant->rank = 0;
+
+                if (!isset($currentRestaurant->rank)) {
+                    $currentRestaurant->rank = 0;
+                }
+
                 if (isset($addRestaurant->rank_user_id) && $addRestaurant->rank_user_id === $userId) {
                     $currentRestaurant->rank = $addRestaurant->rank;
                 }
+
                 $restaurantsList[$lunchRestaurant->id] = $currentRestaurant;
             } else {
                 $addRestaurant->checkbox = false;
+
                 if (isset($addRestaurant->rank_user_id) && $addRestaurant->rank_user_id !== $userId) {
                    $addRestaurant->rank = 0;
                 }
+                
                 $restaurantsList[$addRestaurant->id] = $addRestaurant;
             }
         }
