@@ -27,10 +27,14 @@
                     <td>{{ $lunch->deadline }}</td>
                     <td>{{ $lunch->created_at }}</td>
                     <td>
+                        @if (strtotime($lunch->deadline . " EST") < strtotime("now"))
+                        <a href="/lunch/{{ $lunch->id }}" class="btn btn-info pull-left" style="margin-right: 3px;">View Results</a>
+                        @else
                         <a href="/lunch/{{ $lunch->id }}/edit" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
                         {{ Form::open(['url' => '/lunch/' . $lunch->id, 'method' => 'DELETE']) }}
                         {{ Form::submit('Delete', ['class' => 'btn btn-danger'])}}
                         {{ Form::close() }}
+                        @endif
                     </td>
                 </tr>
                 @endforeach

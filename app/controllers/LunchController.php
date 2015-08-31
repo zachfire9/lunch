@@ -10,6 +10,20 @@ class LunchController extends \BaseController
     {}
  
     /**
+     * Display results of the lunch.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function show($id)
+    {
+        $lunch = new App\Models\Lunch();
+        $view = $lunch->edit(Auth::id(), $id);
+
+        return View::make('lunch.index', $view);
+    }
+
+    /**
      * Show the form for creating a new lunch.
      *
      * @return Response
@@ -17,7 +31,6 @@ class LunchController extends \BaseController
     public function create()
     {
         $lunch = new App\Models\Lunch();
-
         $view = $lunch->create(Auth::id());
 
         return View::make('lunch.create', $view);
@@ -45,7 +58,6 @@ class LunchController extends \BaseController
     public function edit($id)
     {
         $lunch = new App\Models\Lunch();
-
         $view = $lunch->edit(Auth::id(), $id);
 
         return View::make('lunch.edit', $view);
